@@ -227,8 +227,10 @@ class convolutional_residual():
         xx13b = block(xx12b,nfil[0],stride[0],activ[0],kernel[0])
         xx00b = block(xx13b,2,stride[0],activ[0],kernel[0])
         #
+        print(xx00b.shape)
         xx01b = xx00b[:,padpix:-padpix,:,:]
         self.outputs = xx01b
+        print(xx01b.shape)
 
 
 
@@ -252,6 +254,7 @@ class convolutional_residual():
         import tensorflow as tf
         from tensorflow.keras import Model
         from tensorflow.keras.optimizers import RMSprop
+        from tensorflow.keras.utils import plot_model
         os.environ["CUDA_VISIBLE_DEVICES"]= self.cudadevice
         print("Num GPUs Available: ", len(tf.config.list_physical_devices('GPU')))
         physical_devices = tf.config.list_physical_devices('GPU')
@@ -275,7 +278,8 @@ class convolutional_residual():
             self.model = Model(self.inputs, self.outputs)
             self.model.compile(loss=tf.keras.losses.MeanSquaredError(),\
                                optimizer=optimizer)
-        self.model.summary()    
+            plot_model(self.model, show_shapes=True, show_layer_names=True, to_file="../../results/Experiment_2d/model_architecture.png")
+        self.model.summary()   
         self.options = tf.data.Options()
         self.options.experimental_distribute.auto_shard_policy = \
         tf.data.experimental.AutoShardPolicy.FILE

@@ -6,7 +6,9 @@ set -ex
 # Run the 3d simulations
 # cd Simulation_3d/
 # python -u main_segment.py "$@"
+# echo "\n\n done main segment \n\n"
 # python -u main_CNN.py "$@"
+# echo "\n\n done main cnn \n\n"
 # python -u plottrain.py "$@"
 # python -u main_evCNN.py "$@"
 # python -u main_evCNN_error.py "$@"
@@ -16,13 +18,15 @@ set -ex
 # Run the 2d experiments
 cd ./Experiment_2d/
 python -u main_segment.py "$@"
-python -u main_CNN.py "$@"
-python -u plottrain.py "$@"
-python -u main_evCNN_compare.py "$@"
-python -u main_evCNN_error.py "$@"
-python -u main_evCNN.py "$@"
-python -u main_shap.py "$@"
-python -u readshap.py "$@"
+# python -m pdb main_segment.py "$@"
+
+# python -u main_CNN.py "$@"
+# python -u plottrain.py "$@"
+# python -u main_evCNN_compare.py "$@"
+# python -u main_evCNN_error.py "$@"
+# python -u main_evCNN.py "$@"
+# python -u main_shap.py "$@"
+# python -u readshap.py "$@"
 # Run the 2d experiments for node influence
 # cd ../Experiment_2d_point/
 # python -u main_shap.py "$@"

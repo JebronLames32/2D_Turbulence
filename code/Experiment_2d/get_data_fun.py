@@ -9,6 +9,7 @@ File containing the functions for reading the data
 
 import numpy as np
 import h5py
+import pdb
 import os
 
 #%%
@@ -35,6 +36,7 @@ class get_data_norm():
         import glob
         self.delta_y = delta_y
         self.delta_x = delta_x
+        # change path as necessary
         file_ii = self.file+'.'+str(start)+'.*.h5.uvw'
         file_ii2 = glob.glob(file_ii)[0]
         file = h5py.File(file_ii2,'r+')  
@@ -619,9 +621,15 @@ class get_data_norm():
             pass
         indexbar = [bar.start() for bar in re.finditer('/',self.file)]
         if out:
+            # pdb.set_trace()
             file_ii = self.file+'.*.'+str(fieldH)+'.h5.uvw'
+            print('Plotting segmented field:' + str(file_ii))
+            # pdb.set_trace()
         else:
             file_ii = self.file+'.'+str(fieldH)+'.*.h5.uvw'
+            print('Plotting segmented field:' + str(file_ii))
+            # pdb.set_trace()
+            
         file_ii2 = glob.glob(file_ii)[0]
         print('Plotting segmented field:' + str(file_ii2))
         uv_str = self.uvstruc_solve(file_ii2,urmsfile=urmsfile,Hperc=Hperc)        

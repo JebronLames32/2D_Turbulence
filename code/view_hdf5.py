@@ -1,5 +1,5 @@
 import h5py
-filename = "data/uv_fields_io/PIV.1.0.h5.uvw"
+filename = "/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/data/uv_fields_io/PIV.1.0.h5.uvw"
 
 with h5py.File(filename, "r") as f:
     # Print all root level object names (aka keys) 
