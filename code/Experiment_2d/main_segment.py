@@ -11,8 +11,8 @@ import get_data_fun as gd
 import numpy as np
 
 #%% Prepare data for training
-start =  1   
-end =  11
+start =  1000   
+end =  1100
 normdata = gd.get_data_norm()
 normdata.geom_param(start,1,1)
 normdata.calc_rms_point()

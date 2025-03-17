@@ -18,7 +18,7 @@ class get_data_norm():
     Class for getting the normalization
     """
     
-    def __init__(self,file_read='../../data/uv_fields_io/PIV',\
+    def __init__(self,file_read='/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newdata/hdf5/vel_',\
                  rey=1.377e+03,vtau=0.0414,pond='none'):
         """ 
         Initialize the normalization
@@ -28,7 +28,7 @@ class get_data_norm():
         self.vtau = vtau
         self.pond = pond
         try:
-            os.mkdir('../../results/Experiment_2d/')
+            os.mkdir('/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Experiment_2d/')
         except:
             pass
         
@@ -37,7 +37,7 @@ class get_data_norm():
         self.delta_y = delta_y
         self.delta_x = delta_x
         # change path as necessary
-        file_ii = self.file+'.'+str(start)+'.*.h5.uvw'
+        file_ii = self.file+str(start)+'*.h5'
         file_ii2 = glob.glob(file_ii)[0]
         file = h5py.File(file_ii2,'r+')  
         self.x = np.array(file['x'])[::delta_x,0] 
@@ -185,7 +185,7 @@ class get_data_norm():
         """
         import matplotlib.pyplot as plt
         try:
-            os.mkdir('../../results/Experiment_2d/')
+            os.mkdir('/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Experiment_2d/')
         except:
             pass
         
@@ -207,7 +207,7 @@ class get_data_norm():
         plt.legend(fontsize=fs)
         plt.xlim([300,7500])
         plt.tight_layout()
-        plt.savefig('../../results/Experiment_2d/rms_u.png')
+        plt.savefig('/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Experiment_2d/rms_u.png')
         plt.figure()
         plt.plot(self.yplus,vvrms_plus,'-',color=cmap[0,:],label='PIV')
         plt.xlabel('$y^+$',fontsize=fs)
@@ -218,7 +218,7 @@ class get_data_norm():
         plt.legend(fontsize=fs)
         plt.xlim([300,7500])
         plt.tight_layout()
-        plt.savefig('../../results/Experiment_2d/rms_v.png')
+        plt.savefig('/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Experiment_2d/rms_v.png')
         
         plt.figure()
         plt.plot(self.yplus,uv_plus,'-',color=cmap[0,:],label='PIV')
@@ -230,10 +230,10 @@ class get_data_norm():
         plt.legend(fontsize=fs)
         plt.xlim([300,7500])
         plt.tight_layout()
-        plt.savefig('../../results/Experiment_2d/uv.png')
+        plt.savefig('/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Experiment_2d/uv.png')
         
         
-    def save_Urms_point(self,file="../../results/Experiment_2d/Urms.h5"):
+    def save_Urms_point(self,file="/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Experiment_2d/Urms.h5"):
         """
         Function for saving the value of the rms velocity node by node
         """        
@@ -243,7 +243,7 @@ class get_data_norm():
         hf.create_dataset('uv', data=self.uv_point)
         
            
-    def read_Urms_point(self,file="../../results/Experiment_2d/Urms.h5"):
+    def read_Urms_point(self,file="/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Experiment_2d/Urms.h5"):
         """
         Function for saving the value of the rms velocity node by node
         """        
@@ -253,7 +253,7 @@ class get_data_norm():
         self.uv_point = np.array(hf['uv'])
         
         
-    def save_Urms(self,file="../../results/Experiment_2d/Urms.txt"):
+    def save_Urms(self,file="/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Experiment_2d/Urms.txt"):
         """
         Function for saving the value of the rms velocity
         """
@@ -265,7 +265,7 @@ class get_data_norm():
         content = str(self.uv.tolist())+'\n'
         file_save.write(content)    
         
-    def read_Urms(self,file="../../results/Experiment_2d/Urms.txt"):
+    def read_Urms(self,file="/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Experiment_2d/Urms.txt"):
         """
         Function for reading the rms velocity
         """
@@ -299,7 +299,7 @@ class get_data_norm():
             vv = vv_pad.copy()
         return uu,vv
                 
-    def calc_norm(self,umeanfile="../../results/Experiment_2d/Umean.txt"):
+    def calc_norm(self,umeanfile="/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Experiment_2d/Umean.txt"):
         """
         Function for calculating the normalization of u, v, w
         """
@@ -336,7 +336,7 @@ class get_data_norm():
                     self.uvmax = np.max([self.uvmax,np.max(uv_i0)])
                     self.uvmin = np.min([self.uvmin,np.min(uv_i0)])
                 
-    def save_norm(self,file="../../results/Experiment_2d/norm.txt"):
+    def save_norm(self,file="/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Experiment_2d/norm.txt"):
         """
         Function for saving the value of the normalization
         """
@@ -354,7 +354,7 @@ class get_data_norm():
         content = str(self.uvmin)+'\n'
         file_save.write(content)       
                 
-    def read_norm(self,file="../../results/Experiment_2d/norm.txt"):
+    def read_norm(self,file="/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Experiment_2d/norm.txt"):
         """
         Function for reading the normalization
         """
@@ -374,8 +374,8 @@ class get_data_norm():
                 
  
                 
-    def trainvali_data(self,index,ts=0.2,umeanfile="../../results/Experiment_2d/Umean.txt",\
-                       normfile="../../results/Experiment_2d/norm.txt",delta_pred=1,padpix=0):
+    def trainvali_data(self,index,ts=0.2,umeanfile="/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Experiment_2d/Umean.txt",\
+                       normfile="/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Experiment_2d/norm.txt",delta_pred=1,padpix=0):
         
         from sklearn.model_selection import train_test_split        
         import tensorflow as tf
@@ -409,7 +409,7 @@ class get_data_norm():
         train_test_split(data_X, data_Y,test_size=ts,shuffle=False) 
         len_train = len(train_X[:,0,0,0])
         ind_val = index[len_train:].tolist()
-        file_save = open('../../results/Experiment_2d/ind_val.txt', "w+")           
+        file_save = open('/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Experiment_2d/ind_val.txt', "w+")           
         content = str(ind_val)+'\n'
         file_save.write(content) 
         file_save.close()
@@ -436,7 +436,7 @@ class get_data_norm():
         return vel_data
     
         
-    def dimensional_velocity(self,normfield,normfile="../../results/Experiment_2d/norm.txt"):
+    def dimensional_velocity(self,normfield,normfile="/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Experiment_2d/norm.txt"):
         """
         Function for transform the velocity to dimensional values
             * normfile : normalization file
@@ -458,7 +458,7 @@ class get_data_norm():
         return velfield
     
 
-    def uvstruc_solve(self,file_field,urmsfile="../../results/Experiment_2d/Urms.h5",Hperc=1.75): 
+    def uvstruc_solve(self,file_field,urmsfile="/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Experiment_2d/Urms.h5",Hperc=1.75): 
         """
         Function for defining the Q structures in the domain
         """
@@ -483,9 +483,9 @@ class get_data_norm():
         uv_str.segmentation(self.mx,self.my)
         return uv_str
         
-    def calc_uvstruc(self,delta_field=1,urmsfile="../../results/Experiment_2d/Urms.h5",\
-                     Hperc=1.75,fileQ='../../results/Q_fields_io/PIV',\
-                     fold='../../results/Q_fields_io'):
+    def calc_uvstruc(self,delta_field=1,urmsfile="/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Experiment_2d/Urms.h5",\
+                     Hperc=1.75,fileQ='/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Q_fields_io/vel_',\
+                     fold='/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Q_fields_io'):
         """
         Function for calculating the uv structures
         """      
@@ -503,7 +503,7 @@ class get_data_norm():
                 mkdir(fold)
             except:
                 pass
-            index_piv = file_jj.find('PIV')
+            index_piv = file_jj.find('vel_')
             fileQ_ii = fileQ+file_jj[index_piv+3:]
             fileQ_ii = fileQ_ii.replace('uvw','Q')
             hf = h5py.File(fileQ_ii, 'w')
@@ -538,14 +538,14 @@ class get_data_norm():
         return uv_str
     
     def decideH(self,delta=1,out=False,eH_ini=-1,eH_fin=1,eH_delta=20,padpix=15,\
-                fileQ='../../results/Q_fields_io/PIV',urmsfile="../../results/Experiment_2d/Urms.h5",colormap='viridis',
+                fileQ='../../results/Q_fields_io/PIV',urmsfile="/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Experiment_2d/Urms.h5",colormap='viridis',
                 delta_field=1,volfil=2.7e4):
         """
         Function for deciding the most appropriate H
         """
         import re
         try:
-            os.mkdir('../../results/Experiment_2d/')
+            os.mkdir('/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Experiment_2d/')
         except:
             pass
         indexbar = [bar.start() for bar in re.finditer('/',self.file)]
@@ -606,9 +606,9 @@ class get_data_norm():
         plt.tick_params(axis='both', which='major', labelsize=fs)
         plt.grid()
         plt.tight_layout()
-        plt.savefig('../../results/Experiment_2d/Nstruc_H.png')
+        plt.savefig('/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Experiment_2d/Nstruc_H.png')
         
-    def plotsegmentation(self,fieldH,out=False,urmsfile="../../results/Experiment_2d/Urms.h5",Hperc=1.75,\
+    def plotsegmentation(self,fieldH,out=False,urmsfile="/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Experiment_2d/Urms.h5",Hperc=1.75,\
                          fileQ='../../results/Q_fields_io/PIV',colormap_Q='tab20',colormap_struc='viridis',filt=False):
         """
         Function for plotting the segmentation of the domain
@@ -616,7 +616,7 @@ class get_data_norm():
         import re
         import glob        
         try:
-            os.mkdir('../../results/Experiment_2d/')
+            os.mkdir('/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Experiment_2d/')
         except:
             pass
         indexbar = [bar.start() for bar in re.finditer('/',self.file)]
@@ -656,10 +656,10 @@ class get_data_norm():
         cb.ax.tick_params(labelsize=fs)
         try:
 #            from os import mkdir
-            os.mkdir('../../results/Experiment_2d/segment')
+            os.mkdir('/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Experiment_2d/segment')
         except:
             pass
-        plt.savefig('../../results/Experiment_2d/segment/seg_'+str(fieldH)+'_out_'+str(out)+'_H_'+str(Hperc)+'_filt_'+str(filt)+'.png')
+        plt.savefig('/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Experiment_2d/segment/seg_'+str(fieldH)+'_out_'+str(out)+'_H_'+str(Hperc)+'_filt_'+str(filt)+'.png')
         event = uv_str.mat_event
         event[event==0] = np.nan
         fig, axes = plt.subplots(nrows=1, ncols=1, figsize=(10,5))
@@ -675,10 +675,10 @@ class get_data_norm():
                                'Inward\ninteraction','Sweep'],fontsize=fs-4)  
         try:
 #            from os import mkdir
-            os.mkdir('../../results/Experiment_2d/event')
+            os.mkdir('/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Experiment_2d/event')
         except:
             pass
-        plt.savefig('../../results/Experiment_2d/event/seg_'+str(fieldH)+'_out_'+str(out)+'_H_'+str(Hperc)+'.png')
+        plt.savefig('/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Experiment_2d/event/seg_'+str(fieldH)+'_out_'+str(out)+'_H_'+str(Hperc)+'.png')
         
         file = h5py.File(file_ii2,'r+')
         uu = np.array(file['U'])[::self.delta_x,::self.delta_y]
@@ -698,10 +698,10 @@ class get_data_norm():
         cb.ax.tick_params(labelsize=fs)  
         try:
 #            from os import mkdir
-            os.mkdir('../../results/Experiment_2d/vel')
+            os.mkdir('/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Experiment_2d/vel')
         except:
             pass
-        plt.savefig('../../results/Experiment_2d/vel/u_'+str(fieldH)+'_out_'+str(out)+'_H_'+str(Hperc)+'_filt_'+str(filt)+'.png')
+        plt.savefig('/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Experiment_2d/vel/u_'+str(fieldH)+'_out_'+str(out)+'_H_'+str(Hperc)+'_filt_'+str(filt)+'.png')
         fig, axes = plt.subplots(nrows=1, ncols=1, figsize=(10,5))
         im0=axes.pcolor(xx,yy,vv/self.vtau,cmap=colormap_struc)
         im1=axes.contour(xx,yy,matfilt2,levels=np.max(matfilt2),colors='k')
@@ -717,10 +717,10 @@ class get_data_norm():
         cb.ax.tick_params(labelsize=fs)  
         try:
 #            from os import mkdir
-            os.mkdir('../../results/Experiment_2d/vel')
+            os.mkdir('/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Experiment_2d/vel')
         except:
             pass
-        plt.savefig('../../results/Experiment_2d/vel/v_'+str(fieldH)+'_out_'+str(out)+'_H_'+str(Hperc)+'_filt_'+str(filt)+'.png')
+        plt.savefig('/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Experiment_2d/vel/v_'+str(fieldH)+'_out_'+str(out)+'_H_'+str(Hperc)+'_filt_'+str(filt)+'.png')
         uvrms = np.multiply(self.uurms_point,self.vvrms_point)
         fig, axes = plt.subplots(nrows=1, ncols=1, figsize=(10,5))
         im0=axes.pcolor(xx,yy,uvrms/self.vtau**2,cmap=colormap_struc)
@@ -736,10 +736,10 @@ class get_data_norm():
         cb.ax.tick_params(labelsize=fs)  
         try:
 #            from os import mkdir
-            os.mkdir('../../results/Experiment_2d/vel')
+            os.mkdir('/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Experiment_2d/vel')
         except:
             pass
-        plt.savefig('../../results/Experiment_2d/vel/urmsvrms_'+str(fieldH)+'_out_'+str(out)+'_H_'+str(Hperc)+'_filt_'+str(filt)+'.png')
+        plt.savefig('/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Experiment_2d/vel/urmsvrms_'+str(fieldH)+'_out_'+str(out)+'_H_'+str(Hperc)+'_filt_'+str(filt)+'.png')
         
   
     def filter_struc(self,delta=1,folder='../../results/Q_fields_io',padpix=0,volfilt=900):
@@ -768,7 +768,7 @@ class get_data_norm():
         """
         import re
         try:
-            os.mkdir('../../results/Experiment_2d/')
+            os.mkdir('/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Experiment_2d/')
         except:
             pass
         indexbar = [bar.start() for bar in re.finditer('/',self.file)]
@@ -843,7 +843,7 @@ class get_data_norm():
         plt.grid()
         plt.legend(fontsize=fs)
         plt.tight_layout()
-        plt.savefig('../../results/Experiment_2d/N_struc.png')
+        plt.savefig('/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Experiment_2d/N_struc.png')
         plt.figure()
         plt.plot(cases_vec,nq1,'-',color=cmap[0,:],label='Q1')
         plt.plot(cases_vec,nq2,'-',color=cmap[1,:],label='Q2')
@@ -855,7 +855,7 @@ class get_data_norm():
         plt.grid()
         plt.legend(fontsize=fs)
         plt.tight_layout()
-        plt.savefig('../../results/Experiment_2d/N_Q_struc.png')
+        plt.savefig('/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Experiment_2d/N_Q_struc.png')
         plt.figure()
         plt.plot(cases_vec,volq1,'-',color=cmap[0,:],label='Q1')
         plt.plot(cases_vec,volq2,'-',color=cmap[1,:],label='Q2')
@@ -867,7 +867,7 @@ class get_data_norm():
         plt.grid()
         plt.legend(fontsize=fs)
         plt.tight_layout()
-        plt.savefig('../../results/Experiment_2d/V_Q_struc.png')
+        plt.savefig('/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Experiment_2d/V_Q_struc.png')
         plt.figure()
         plt.plot(cases_vec,uvq1,'-',color=cmap[0,:],label='Q1')
         plt.plot(cases_vec,uvq2,'-',color=cmap[1,:],label='Q2')
@@ -879,7 +879,7 @@ class get_data_norm():
         plt.grid()
         plt.legend(fontsize=fs)
         plt.tight_layout()
-        plt.savefig('../../results/Experiment_2d/uv_Q_struc.png')
+        plt.savefig('/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Experiment_2d/uv_Q_struc.png')
             
         
         
