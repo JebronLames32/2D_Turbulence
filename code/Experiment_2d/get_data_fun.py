@@ -8,7 +8,7 @@ File containing the functions for reading the data
 """
 
 import numpy as np
-import pandas as pd
+import h5py
 import pdb
 import os
 
@@ -18,7 +18,7 @@ class get_data_norm():
     Class for getting the normalization
     """
     
-    def __init__(self,file_read='../../newdata/hdf5/vel_',\
+    def __init__(self,file_read='../../data/uv_fields_io/PIV',\
                  rey=1.377e+03,vtau=0.0414,pond='none'):
         """ 
         Initialize the normalization
@@ -39,13 +39,7 @@ class get_data_norm():
         # change path as necessary
         file_ii = self.file+'.'+str(start)+'.*.h5.uvw'
         file_ii2 = glob.glob(file_ii)[0]
-        file = pd.read_csv(file_ii2,'r+') 
-        file = {
-            'U': df[['U:0']].to_numpy(),
-            'V': df[['U:1']].to_numy(),
-            'x': df[['x']].to_numpy(),  # Ensures a 2D array like h5py
-            'y': df[['y']].to_numpy()   # Ensures a 2D array like h5py
-        } 
+        file = h5py.File(file_ii2,'r+')  
         self.x = np.array(file['x'])[::delta_x,0] 
         self.y = np.array(file['y'])[0,::delta_y]
         self.my  = int((len(self.y)+delta_y-1)/delta_y)
@@ -88,7 +82,7 @@ class get_data_norm():
             try:
                 file_ii = listfiles[ii]
                 print('RMS velocity calculation:' + str(file_ii))
-                file = pd.read_csv(folder+'/'+file_ii,'r+')
+                file = h5py.File(folder+'/'+file_ii,'r+')
                 flag = 1
             except:
                 print('Reading failed...')
@@ -120,7 +114,7 @@ class get_data_norm():
             try:
                 file_ii = listfiles[ii]
                 print('RMS velocity calculation:' + str(file_ii))
-                file = pd.read_csv(folder+'/'+file_ii,'r+')
+                file = h5py.File(folder+'/'+file_ii,'r+')
                 flag = 1
             except:
                 print('Reading failed...')
@@ -160,7 +154,7 @@ class get_data_norm():
             try:
                 file_ii = listfiles[ii]
                 print('RMS velocity calculation:' + str(file_ii))
-                file = pd.read_csv(folder+'/'+file_ii,'r+')
+                file = h5py.File(folder+'/'+file_ii,'r+')
                 flag = 1
             except:
                 print('Reading failed...')
@@ -243,7 +237,7 @@ class get_data_norm():
         """
         Function for saving the value of the rms velocity node by node
         """        
-        hf = pd.read_csv(file, 'w')
+        hf = h5py.File(file, 'w')
         hf.create_dataset('urms', data=self.uurms_point)
         hf.create_dataset('vrms', data=self.vvrms_point)
         hf.create_dataset('uv', data=self.uv_point)
@@ -253,7 +247,7 @@ class get_data_norm():
         """
         Function for saving the value of the rms velocity node by node
         """        
-        hf = pd.read_csv(file, 'r')
+        hf = h5py.File(file, 'r')
         self.uurms_point = np.array(hf['urms'])
         self.vvrms_point = np.array(hf['vrms'])
         self.uv_point = np.array(hf['uv'])
@@ -295,7 +289,7 @@ class get_data_norm():
             file_ii = self.file+'.'+str(ii)+'.*.h5.uvw'
         file_ii2 = glob.glob(file_ii)[0]
         print('Normalization velocity calculation:' + str(file_ii2))
-        file = pd.read_csv(file_ii2,'r+')    
+        file = h5py.File(file_ii2,'r+')    
         uu = np.array(file['U'])[::self.delta_x,::self.delta_y]
         vv = np.array(file['V'])[::self.delta_x,::self.delta_y]
         if padpix > 0 and out:
@@ -318,7 +312,7 @@ class get_data_norm():
             try:
                 file_ii = listfiles[ii]
                 print('Norm velocity calculation:' + str(file_ii))
-                file = pd.read_csv(folder+'/'+file_ii,'r+')
+                file = h5py.File(folder+'/'+file_ii,'r+')
                 flag = 1
             except:
                 print('Reading failed...')
@@ -468,7 +462,7 @@ class get_data_norm():
         """
         Function for defining the Q structures in the domain
         """
-        file = pd.read_csv(file_field,'r+')
+        file = h5py.File(file_field,'r+')
         print('Calculating for:' + str(file_field)) 
         uu = np.array(file['U'])[::self.delta_x,::self.delta_y]
         vv = np.array(file['V'])[::self.delta_x,::self.delta_y]
@@ -512,7 +506,7 @@ class get_data_norm():
             index_piv = file_jj.find('PIV')
             fileQ_ii = fileQ+file_jj[index_piv+3:]
             fileQ_ii = fileQ_ii.replace('uvw','Q')
-            hf = pd.read_csv(fileQ_ii, 'w')
+            hf = h5py.File(fileQ_ii, 'w')
             hf.create_dataset('Qs', data=uv_str.mat_struc)
             hf.create_dataset('Qs_event', data=uv_str.mat_event)
             hf.create_dataset('Qs_event_filtered', data=uv_str.mat_event_filtered)
@@ -563,7 +557,7 @@ class get_data_norm():
         volmax_struc = np.zeros((eH_delta,))
         for jj in np.arange(number_cases):
             file_jj = listfiles[jj]
-            file = pd.read_csv(folder+'/'+file_jj,'r+')
+            file = h5py.File(folder+'/'+file_jj,'r+')
             print('Calculating for:' + str(file_jj))
             eH_vec = np.linspace(eH_ini,eH_fin,eH_delta)
             H_vec = 10**eH_vec
@@ -686,7 +680,7 @@ class get_data_norm():
             pass
         plt.savefig('../../results/Experiment_2d/event/seg_'+str(fieldH)+'_out_'+str(out)+'_H_'+str(Hperc)+'.png')
         
-        file = pd.read_csv(file_ii2,'r+')
+        file = h5py.File(file_ii2,'r+')
         uu = np.array(file['U'])[::self.delta_x,::self.delta_y]
         vv = np.array(file['V'])[::self.delta_x,::self.delta_y]
         fig, axes = plt.subplots(nrows=1, ncols=1, figsize=(10,5))
@@ -809,7 +803,7 @@ class get_data_norm():
             vol2 = np.sum(uv_str.vol[q2ind])/np.sum(self.vol)
             vol3 = np.sum(uv_str.vol[q3ind])/np.sum(self.vol)
             vol4 = np.sum(uv_str.vol[q4ind])/np.sum(self.vol)
-            file = pd.read_csv(folder_uv+'/'+file_jjuv,'r+')
+            file = h5py.File(folder_uv+'/'+file_jjuv,'r+')
             uu = np.array(file['U'])[::self.delta_x,::self.delta_y]
             vv = np.array(file['V'])[::self.delta_x,::self.delta_y]
             uvtot = np.sum(abs(np.multiply(uu,vv)))
@@ -905,7 +899,7 @@ class uvstruc():
             pass
     
     def read_struc(self,fileQ_ii):
-        file = pd.read_csv(fileQ_ii, 'r')
+        file = h5py.File(fileQ_ii, 'r')
         print('Reading: '+fileQ_ii)
         mat_struc = np.array(file['Qs'])
         mat_event = np.array(file['Qs_event'])
