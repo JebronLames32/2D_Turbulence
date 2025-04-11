@@ -484,7 +484,7 @@ class get_data_norm():
         return uv_str
         
     def calc_uvstruc(self,delta_field=1,urmsfile="/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Experiment_2d/Urms.h5",\
-                     Hperc=1.75,fileQ='/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Q_fields_io/vel_',\
+                     Hperc=1.75,fileQ='/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Q_fields_io/vel',\
                      fold='/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Q_fields_io'):
         """
         Function for calculating the uv structures
@@ -503,7 +503,7 @@ class get_data_norm():
                 mkdir(fold)
             except:
                 pass
-            index_piv = file_jj.find('vel_')
+            index_piv = file_jj.find('vel')
             fileQ_ii = fileQ+file_jj[index_piv+3:]
             fileQ_ii = fileQ_ii.replace('uvw','Q')
             hf = h5py.File(fileQ_ii, 'w')
@@ -538,7 +538,7 @@ class get_data_norm():
         return uv_str
     
     def decideH(self,delta=1,out=False,eH_ini=-1,eH_fin=1,eH_delta=20,padpix=15,\
-                fileQ='../../results/Q_fields_io/PIV',urmsfile="/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Experiment_2d/Urms.h5",colormap='viridis',
+                fileQ='/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/results/Q_fields_io/PIV',urmsfile="/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Experiment_2d/Urms.h5",colormap='viridis',
                 delta_field=1,volfil=2.7e4):
         """
         Function for deciding the most appropriate H
@@ -609,7 +609,7 @@ class get_data_norm():
         plt.savefig('/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Experiment_2d/Nstruc_H.png')
         
     def plotsegmentation(self,fieldH,out=False,urmsfile="/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Experiment_2d/Urms.h5",Hperc=1.75,\
-                         fileQ='../../results/Q_fields_io/PIV',colormap_Q='tab20',colormap_struc='viridis',filt=False):
+                         fileQ='/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/results/Q_fields_io/PIV',colormap_Q='tab20',colormap_struc='viridis',filt=False):
         """
         Function for plotting the segmentation of the domain
         """
@@ -622,11 +622,11 @@ class get_data_norm():
         indexbar = [bar.start() for bar in re.finditer('/',self.file)]
         if out:
             # pdb.set_trace()
-            file_ii = self.file+'.*.'+str(fieldH)+'.h5.uvw'
+            file_ii = self.file+'*.'+str(fieldH)+'.h5'
             print('Plotting segmented field:' + str(file_ii))
             # pdb.set_trace()
         else:
-            file_ii = self.file+'.'+str(fieldH)+'.*.h5.uvw'
+            file_ii = self.file+str(fieldH)+'*.h5'
             print('Plotting segmented field:' + str(file_ii))
             # pdb.set_trace()
             
@@ -742,7 +742,7 @@ class get_data_norm():
         plt.savefig('/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Experiment_2d/vel/urmsvrms_'+str(fieldH)+'_out_'+str(out)+'_H_'+str(Hperc)+'_filt_'+str(filt)+'.png')
         
   
-    def filter_struc(self,delta=1,folder='../../results/Q_fields_io',padpix=0,volfilt=900):
+    def filter_struc(self,delta=1,folder='/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/results/Q_fields_io',padpix=0,volfilt=900):
         """
         Function for ploting Qs statistics
         """
@@ -762,7 +762,7 @@ class get_data_norm():
         print('Percentage of filtered structures: '+str((sum_filt/number_cases)*100)+'%')
         
                 
-    def Q_stat(self,delta=1,folder='../../results/Q_fields_io',padpix=0):
+    def Q_stat(self,delta=1,folder='/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Q_fields_io',padpix=0):
         """
         Function for ploting Qs statistics
         """
@@ -894,7 +894,7 @@ class uvstruc():
         if len(mat_struc)>0:
             self.mat_struc = mat_struc
         try:
-            os.mkdir('../../results/Q_fields_io/')
+            os.mkdir('/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/results/Q_fields_io/')
         except:
             pass
     
@@ -1077,7 +1077,7 @@ class uvstruc():
                     self.mat_event_filtered[vpoints[0,nn_node],vpoints[1,nn_node]] = self.event[nn]
                 
                 
-    def segmentation(self,mx,my,filvol=900):
+    def segmentation(self,mx,my,filvol=1e8):
         """
         Function to segment the model
         """

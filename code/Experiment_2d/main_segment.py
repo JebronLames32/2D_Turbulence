@@ -26,7 +26,7 @@ normdata.save_norm()
 #normdata.read_norm()
 uv_struc = normdata.calc_uvstruc(Hperc=0.54)
 Hperc = normdata.decideH(delta_field=100,eH_ini=-1,eH_fin=1,eH_delta=20)
-fieldH = 11
+fieldH = 1100
 # to number of timesteps
 normdata.plotsegmentation(fieldH,Hperc=1.75,filt=True)
 normdata.Q_stat()
