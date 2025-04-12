@@ -14,7 +14,7 @@ def nearest(array,value):
     nearest = array[index]
     return nearest,index
 
-def plottrain(file="../../results/Experiment_2d/hist.txt"):
+def plottrain(file="/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Experiment_2d/hist.txt"):
     """
     Function for plotting the training of the neural network
     """ 
@@ -36,7 +36,7 @@ def plottrain(file="../../results/Experiment_2d/hist.txt"):
     plt.legend(fontsize=fs)
     plt.grid()
     plt.tight_layout()
-    plt.savefig('../../results/Experiment_2d/Loss_plot.png')
+    plt.savefig('/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Experiment_2d/Loss_plot.png')
     plt.show()
 
 
@@ -143,14 +143,14 @@ class convolutional_residual():
     """
     Class for creating a convolutional neural network with a residual layer
     """
-    def __init__(self,ngpu=1,fileddbb='../../data/uv_fields_io/PIV',\
+    def __init__(self,ngpu=1,fileddbb='/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newdata/hdf5/vel_',\
                  pond='none'):
         self.devices(ngpu)
         self.fileddbb = fileddbb
         self.pond = pond
         try:
             # was getting the error earlier because os has not been imported. SO, created dir manually
-            os.mkdir('../../results/Experiment_2d/')
+            os.mkdir('/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Experiment_2d/')
         except:
             pass
                 
@@ -209,19 +209,19 @@ class convolutional_residual():
         xx43 = block(xx42,nfil[2]*2,stride[2],activ[2],kernel[2])
         # go to third layer
         xx30b = invblock(xx43,nfil[2],2,activ[2],kernel[2],outpad=(0,0))
-        xx31b = Concatenate()([xx30b[:,:-1,:,:],xx33])
+        xx31b = Concatenate()([xx30b, xx33])
         # third         
         xx32b = block(xx31b,nfil[1],stride[1],activ[1],kernel[1])
         xx33b = block(xx32b,nfil[1],stride[1],activ[1],kernel[1])
         # go to second layer
         xx20b = invblock(xx33b,nfil[1],2,activ[1],kernel[2],outpad=(0,0))
-        xx21b = Concatenate()([xx20b,xx23])   
+        xx21b = Concatenate()([xx20b[:,:-1,:-1,:],xx23])   
         # second         
         xx22b = block(xx21b,nfil[1],stride[1],activ[1],kernel[1])
         xx23b = block(xx22b,nfil[1],stride[1],activ[1],kernel[1])
         # go to first layer
         xx10b = invblock(xx23b,nfil[0],2,activ[0],kernel[1],outpad=(0,0)) 
-        xx11b = Concatenate()([xx10b,xx13])
+        xx11b = Concatenate()([xx10b[:,:-1,:-1,:],xx13])
         # First layer
         xx12b = block(xx11b,nfil[0],stride[0],activ[0],kernel[0])
         xx13b = block(xx12b,nfil[0],stride[0],activ[0],kernel[0])
@@ -278,7 +278,7 @@ class convolutional_residual():
             self.model = Model(self.inputs, self.outputs)
             self.model.compile(loss=tf.keras.losses.MeanSquaredError(),\
                                optimizer=optimizer)
-            plot_model(self.model, show_shapes=True, show_layer_names=True, to_file="../../results/Experiment_2d/model_architecture.png")
+            plot_model(self.model, show_shapes=True, show_layer_names=True, to_file="/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Experiment_2d/model_architecture.png")
         self.model.summary()   
         self.options = tf.data.Options()
         self.options.experimental_distribute.auto_shard_policy = \
@@ -286,7 +286,7 @@ class convolutional_residual():
         
     def train_model(self,start,end,delta_t=10,delta_e=20,max_epoch=100,\
                     batch_size=1,down_y=1,down_x=1,\
-                    trainfile='../../results/Experiment_2d/trained_model.h5',trainhist='../../results/Experiment_2d/hist.txt',\
+                    trainfile='/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Experiment_2d/trained_model.h5',trainhist='/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Experiment_2d/hist.txt',\
                     delta_pred=1,padpix=15):
         """
         Function for training the CNN model
@@ -363,14 +363,14 @@ class convolutional_residual():
             ii_fin = ii_ini+delta_t
                      
 #%%            
-    def load_ANN(self,filename='../../results/Experiment_2d/trained_model.h5'):
+    def load_ANN(self,filename='/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Experiment_2d/trained_model.h5'):
         """ 
         Function for loading the ANN model
         """
         import tensorflow as tf 
         self.model = tf.keras.models.load_model(filename)
     
-    def load_model(self,filename='../../results/Experiment_2d/trained_model.h5'): 
+    def load_model(self,filename='/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Experiment_2d/trained_model.h5'): 
         """
         Function for loading the tensorflow model for training
             * filename : file name of the model
@@ -471,7 +471,7 @@ class convolutional_residual():
    
     
     def pred_rms_xy(self,start=1,end=2,step=1,down_y=1,down_x=1,padpix=15,\
-                    testcases=False,filetest='../../results/Experiment_2d/ind_val.txt'):
+                    testcases=False,filetest='/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Experiment_2d/ind_val.txt'):
         """
         Function for calculating the rms of the velocity components and the 
         product of the velocity fluctuations of the predicted fields
@@ -520,7 +520,7 @@ class convolutional_residual():
         self.uv_xys    = np.divide(uvs_cum,nns_cum)         
         
             
-    def saverms(self,file="../../results/Experiment_2d/Urmspred.txt"):
+    def saverms(self,file="/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Experiment_2d/Urmspred.txt"):
         """
         Function for saving the value of the rms velocity
         """
@@ -532,7 +532,7 @@ class convolutional_residual():
         content = str(self.uv.tolist())+'\n'
         file_save.write(content)  
         
-    def saverms_xy(self,file="../../results/Experiment_2d/Urmspred_xy.h5"):
+    def saverms_xy(self,file="/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Experiment_2d/Urmspred_xy.h5"):
         """
         Function for saving the value of the rms velocity
         """
@@ -545,7 +545,7 @@ class convolutional_residual():
         hf.create_dataset('vvrms_s', data=self.vvrms_xys)
         hf.create_dataset('uv_s', data=self.uv_xys)
         
-    def readrms(self,file="../../results/Experiment_2d/Urmspred.txt"):
+    def readrms(self,file="/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Experiment_2d/Urmspred.txt"):
         """
         Read the predicted rms velocity
         """
@@ -557,7 +557,7 @@ class convolutional_residual():
         self.uv = np.array(file_read.readline().replace('[','').\
                               replace(']','').split(','),dtype='float')
     
-    def readrms_xy(self,file="../../results/Experiment_2d/Urmspred_xy.h5"):
+    def readrms_xy(self,file="/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Experiment_2d/Urmspred_xy.h5"):
         """
         Read the predicted rms velocity
         """
@@ -615,7 +615,7 @@ class convolutional_residual():
         plt.legend(fontsize=fs)
         plt.xlim([1,125])
         plt.tight_layout()
-        plt.savefig('../../results/Experiment_2d/rms_u.png')
+        plt.savefig('/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Experiment_2d/rms_u.png')
         plt.figure()
         plt.plot(data.yplus,vvrms_dplus_data,'-',color=cmap[0,:],label='DNS lower')
         plt.plot(data.yplus,vvrms_uplus_data,'--',color=cmap[0,:],label='DNS upper')
@@ -629,7 +629,7 @@ class convolutional_residual():
         plt.legend(fontsize=fs)
         plt.xlim([1,125])
         plt.tight_layout()
-        plt.savefig('../../results/Experiment_2d/rms_v.png')
+        plt.savefig('/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Experiment_2d/rms_v.png')
         plt.figure()
         plt.plot(data.yplus,wwrms_dplus_data,'-',color=cmap[0,:],label='DNS lower')
         plt.plot(data.yplus,wwrms_uplus_data,'--',color=cmap[0,:],label='DNS upper')
@@ -643,7 +643,7 @@ class convolutional_residual():
         plt.legend(fontsize=fs)
         plt.xlim([1,125])
         plt.tight_layout()
-        plt.savefig('../../results/Experiment_2d/rms_w.png')
+        plt.savefig('/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Experiment_2d/rms_w.png')
         
         plt.figure()
         plt.plot(data.yplus,uv_dplus_data,'-',color=cmap[0,:],label='DNS lower')
@@ -658,7 +658,7 @@ class convolutional_residual():
         plt.legend(fontsize=fs)
         plt.xlim([1,125])
         plt.tight_layout()
-        plt.savefig('../../results/Experiment_2d/uv.png')
+        plt.savefig('/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Experiment_2d/uv.png')
         plt.figure()
         plt.plot(data.yplus,vw_dplus_data,'-',color=cmap[0,:],label='DNS lower')
         plt.plot(data.yplus,vw_uplus_data,'--',color=cmap[0,:],label='DNS upper')
@@ -672,7 +672,7 @@ class convolutional_residual():
         plt.legend(fontsize=fs)
         plt.xlim([1,125])
         plt.tight_layout()
-        plt.savefig('../../results/Experiment_2d/vw.png')
+        plt.savefig('/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Experiment_2d/vw.png')
         plt.figure()
         plt.plot(data.yplus,uw_dplus_data,'-',color=cmap[0,:],label='DNS lower')
         plt.plot(data.yplus,uw_uplus_data,'--',color=cmap[0,:],label='DNS upper')
@@ -686,7 +686,7 @@ class convolutional_residual():
         plt.legend(fontsize=fs)
         plt.xlim([1,125])
         plt.tight_layout()
-        plt.savefig('../../results/Experiment_2d/uw.png')
+        plt.savefig('/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Experiment_2d/uw.png')
  
         
     def plotrms_sim_xy(self,data,padpix=15,colormap='viridis'):
@@ -728,7 +728,7 @@ class convolutional_residual():
         cb.ax.tick_params(axis="both",labelsize=fs)
         plt.tick_params(axis='both', which='major', labelsize=fs)
         plt.tight_layout()
-        plt.savefig('../../results/Experiment_2d/rms_u_xy.png')
+        plt.savefig('/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Experiment_2d/rms_u_xy.png')
         fig=plt.figure()
         im0 = plt.pcolor(xx,yy,err_vvrms_plus_pred)
         plt.xlabel('$x^+$',fontsize=fs)
@@ -739,7 +739,7 @@ class convolutional_residual():
         cb.ax.tick_params(axis="both",labelsize=fs)
         plt.tick_params(axis='both', which='major', labelsize=fs)
         plt.tight_layout()
-        plt.savefig('../../results/Experiment_2d/rms_v_xy.png')
+        plt.savefig('/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Experiment_2d/rms_v_xy.png')
         fig=plt.figure()
         im0 = plt.pcolor(xx,yy,err_uv_plus_pred)
         plt.xlabel('$x^+$',fontsize=fs)
@@ -750,7 +750,7 @@ class convolutional_residual():
         cb.ax.tick_params(axis="both",labelsize=fs)
         plt.tick_params(axis='both', which='major', labelsize=fs)
         plt.tight_layout()
-        plt.savefig('../../results/Experiment_2d/uv_xy.png')
+        plt.savefig('/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Experiment_2d/uv_xy.png')
         l_x = data.mx-2*padpix
         err_x1_u = err_uurms_plus_pred[int(l_x/6)]
         err_x2_u = err_uurms_plus_pred[int(l_x/6*2)]
@@ -779,7 +779,7 @@ class convolutional_residual():
         plt.legend(fontsize=fs)
         plt.tight_layout()
         plt.grid()
-        plt.savefig('../../results/Experiment_2d/error_u_posx.png')
+        plt.savefig('/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Experiment_2d/error_u_posx.png')
         fig=plt.figure()
         plt.plot(data.yplus,err_x1_v,label='$x^+=$'+str(x1),color=plt.cm.get_cmap(colormap,6).colors[0,:])
         plt.plot(data.yplus,err_x2_v,label='$x^+=$'+str(x2),color=plt.cm.get_cmap(colormap,6).colors[1,:])
@@ -792,11 +792,11 @@ class convolutional_residual():
         plt.legend(fontsize=fs)
         plt.tight_layout()
         plt.grid()
-        plt.savefig('../../results/Experiment_2d/error_v_posx.png')
+        plt.savefig('/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Experiment_2d/error_v_posx.png')
         
                
     def plotrms_sim_xy_compare(self,data,xplus=0,colormap='viridis',padpix=15,\
-                               literature=False,lit_file='../../data/Experiment_2d/torroja_retau_934.txt'):
+                               literature=False,lit_file='/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/data/Experiment_2d/torroja_retau_934.txt'):
         """
         Function for plotting the rms
         """        
@@ -853,7 +853,7 @@ class convolutional_residual():
         plt.legend(fontsize=fs)
         plt.tight_layout()
         plt.grid()
-        plt.savefig('../../results/Experiment_2d/urms_x'+str(np.round(xxlab))+'.png')
+        plt.savefig('/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Experiment_2d/urms_x'+str(np.round(xxlab))+'.png')
         fig=plt.figure()
         plt.plot(data.yplus,vvrms_pred/data.vtau,label='$prediction$',color=plt.cm.get_cmap(colormap,colormax).colors[0,:])
         plt.plot(data.yplus,vvrms_sim/data.vtau,label='$simulation$',color=plt.cm.get_cmap(colormap,colormax).colors[1,:])
@@ -867,7 +867,7 @@ class convolutional_residual():
         plt.legend(fontsize=fs)
         plt.tight_layout()
         plt.grid()
-        plt.savefig('../../results/Experiment_2d/vrms_x'+str(np.round(xxlab))+'.png')
+        plt.savefig('/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Experiment_2d/vrms_x'+str(np.round(xxlab))+'.png')
         fig=plt.figure()
         plt.plot(data.yplus,abs(uv_pred/data.vtau**2),label='$prediction$',color=plt.cm.get_cmap(colormap,colormax).colors[0,:])
         plt.plot(data.yplus,abs(uv_sim/data.vtau**2),label='$simulation$',color=plt.cm.get_cmap(colormap,colormax).colors[1,:])
@@ -879,7 +879,7 @@ class convolutional_residual():
         plt.legend(fontsize=fs)
         plt.tight_layout()
         plt.grid()
-        plt.savefig('../../results/Experiment_2d/uv_x'+str(np.round(xxlab))+'.png')
+        plt.savefig('/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Experiment_2d/uv_x'+str(np.round(xxlab))+'.png')
         fig=plt.figure()
         plt.plot(data.yplus,abs(uvrms_pred/data.vtau**2),label='$prediction$',color=plt.cm.get_cmap(colormap,colormax).colors[0,:])
         plt.plot(data.yplus,abs(uvrms_sim/data.vtau**2),label='$simulation$',color=plt.cm.get_cmap(colormap,colormax).colors[1,:])
@@ -893,7 +893,7 @@ class convolutional_residual():
         plt.legend(fontsize=fs)
         plt.tight_layout()
         plt.grid()
-        plt.savefig('../../results/Experiment_2d/urmsvrms_x'+str(np.round(xxlab))+'.png')
+        plt.savefig('/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Experiment_2d/urmsvrms_x'+str(np.round(xxlab))+'.png')
         
     def plotrms_sim(self,data):
         """
@@ -920,7 +920,7 @@ class convolutional_residual():
         plt.legend(fontsize=fs)
         plt.xlim([300,7500])
         plt.tight_layout()
-        plt.savefig('../../results/Experiment_2d/rms_u.png')
+        plt.savefig('/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Experiment_2d/rms_u.png')
         plt.figure()
         plt.plot(data.yplus,abs(np.divide(uurms_plus_data-uurms_plus_pred,\
                                           uurms_plus_data)),'-',color=cmap[0,:])
@@ -933,7 +933,7 @@ class convolutional_residual():
         plt.xlim([300,7500])
         plt.yscale('log')
         plt.tight_layout()
-        plt.savefig('../../results/Experiment_2d/rms_u_e.png')
+        plt.savefig('/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Experiment_2d/rms_u_e.png')
         plt.figure()
         plt.plot(data.yplus,vvrms_plus_data,'-',color=cmap[0,:],label='DNS')
         plt.plot(data.yplus,vvrms_plus_pred,'-',color=cmap[3,:],label='CNN')
@@ -945,7 +945,7 @@ class convolutional_residual():
         plt.legend(fontsize=fs)
         plt.xlim([300,7500])
         plt.tight_layout()
-        plt.savefig('../../results/Experiment_2d/rms_v.png')
+        plt.savefig('/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Experiment_2d/rms_v.png')
         plt.figure()
         plt.plot(data.yplus,abs(np.divide(vvrms_plus_data-vvrms_plus_pred,\
                                           vvrms_plus_data)),'-',color=cmap[0,:])
@@ -958,7 +958,7 @@ class convolutional_residual():
         plt.xlim([300,7500])
         plt.yscale('log')
         plt.tight_layout()
-        plt.savefig('../../results/Experiment_2d/rms_v_e.png')
+        plt.savefig('/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Experiment_2d/rms_v_e.png')
         plt.figure()
         plt.plot(data.yplus,uv_plus_data,'-',color=cmap[0,:],label='DNS')
         plt.plot(data.yplus,uv_plus_pred,'-',color=cmap[3,:],label='CNN')
@@ -970,7 +970,7 @@ class convolutional_residual():
         plt.legend(fontsize=fs)
         plt.xlim([300,7500])
         plt.tight_layout()
-        plt.savefig('../../results/Experiment_2d/uv.png')
+        plt.savefig('/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Experiment_2d/uv.png')
         plt.figure()
         plt.plot(data.yplus,abs(np.divide(uv_plus_data-uv_plus_pred,\
                                           uv_plus_data)),'-',color=cmap[0,:])
@@ -983,7 +983,7 @@ class convolutional_residual():
         plt.xlim([300,7500])
         plt.yscale('log')
         plt.tight_layout()
-        plt.savefig('../../results/Experiment_2d/rms_uv_e.png')
+        plt.savefig('/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Experiment_2d/rms_uv_e.png')
         
     def plotrms_simlin(self,data):
         """
@@ -1009,7 +1009,7 @@ class convolutional_residual():
         plt.legend(fontsize=fs)
         plt.xlim([300,7500])
         plt.tight_layout()
-        plt.savefig('../../results/Experiment_2d/rms_ulin.png')
+        plt.savefig('/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Experiment_2d/rms_ulin.png')
         plt.figure()
         plt.plot(data.yplus,abs(np.divide((uurms_plus_data-uurms_plus_pred),\
                  uurms_plus_data)),'-',color=cmap[0,:])
@@ -1020,7 +1020,7 @@ class convolutional_residual():
         plt.xlim([300,7500])
         plt.yscale('log')
         plt.tight_layout()
-        plt.savefig('../../results/Experiment_2d/rms_uline.png')
+        plt.savefig('/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Experiment_2d/rms_uline.png')
         plt.figure()
         plt.plot(data.yplus,vvrms_plus_data,'-',color=cmap[0,:],label='DNS')
         plt.plot(data.yplus,vvrms_plus_pred,'-',color=cmap[3,:],label='CNN')
@@ -1031,7 +1031,7 @@ class convolutional_residual():
         plt.legend(fontsize=fs)
         plt.xlim([300,7500])
         plt.tight_layout()
-        plt.savefig('../../results/Experiment_2d/rms_vlin.png')
+        plt.savefig('/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Experiment_2d/rms_vlin.png')
         plt.figure()
         plt.plot(data.yplus,abs(np.divide((vvrms_plus_data-vvrms_plus_pred),\
                  vvrms_plus_data)),'-',color=cmap[0,:])
@@ -1042,7 +1042,7 @@ class convolutional_residual():
         plt.xlim([300,7500])
         plt.yscale('log')
         plt.tight_layout()
-        plt.savefig('../../results/Experiment_2d/rms_vline.png')
+        plt.savefig('/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Experiment_2d/rms_vline.png')
         plt.figure()
         plt.plot(data.yplus,uv_plus_data,'-',color=cmap[0,:],label='DNS')
         plt.plot(data.yplus,uv_plus_pred,'-',color=cmap[3,:],label='CNN')
@@ -1053,7 +1053,7 @@ class convolutional_residual():
         plt.legend(fontsize=fs)
         plt.xlim([300,7500])
         plt.tight_layout()
-        plt.savefig('../../results/Experiment_2d/uvlin.png')
+        plt.savefig('/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Experiment_2d/uvlin.png')
         plt.figure()
         plt.plot(data.yplus,abs(np.divide((uv_plus_data-uv_plus_pred),\
                  uv_plus_data)),'-',color=cmap[0,:])
@@ -1064,7 +1064,7 @@ class convolutional_residual():
         plt.xlim([300,7500])
         plt.yscale('log')
         plt.tight_layout()
-        plt.savefig('../../results/Experiment_2d/uvline.png')
+        plt.savefig('/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Experiment_2d/uvline.png')
         
     def plot_flowfield(self,data,ii,axis='y',down_y=1,down_x=1,\
                        facerr=1,padpix=15):
@@ -1156,10 +1156,10 @@ class convolutional_residual():
             cb1.ax.tick_params(axis="both",labelsize=fs)     
             try:
                 from os import mkdir
-                mkdir('../../results/Experiment_2d/field_error')
+                mkdir('/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Experiment_2d/field_error')
             except:
                 pass
-            plt.savefig('../../results/Experiment_2d/field_error/u_'+str(ii))
+            plt.savefig('/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Experiment_2d/field_error/u_'+str(ii))
             # Plots for v
             fig, axes = plt.subplots(nrows=3, ncols=1, figsize=(10,5))
             im0=axes[0].pcolor(xx,yy,vv_ys,vmax=vv_max,vmin=vv_min,cmap=colormap)
@@ -1199,10 +1199,10 @@ class convolutional_residual():
             cb1.ax.tick_params(axis="both",labelsize=fs)   
             try:
                 from os import mkdir
-                mkdir('../../results/Experiment_2d/field_error')
+                mkdir('/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Experiment_2d/field_error')
             except:
                 pass
-            plt.savefig('../../results/Experiment_2d/field_error/v_'+str(ii))
+            plt.savefig('/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Experiment_2d/field_error/v_'+str(ii))
             # Plots for uv
             fig, axes = plt.subplots(nrows=3, ncols=1, figsize=(10,5))
             im0=axes[0].pcolor(xx,yy,uv_ys,vmax=uv_max,vmin=uv_min,cmap=colormap)
@@ -1242,14 +1242,14 @@ class convolutional_residual():
             cb1.ax.tick_params(axis="both",labelsize=fs)     
             try:
                 from os import mkdir
-                mkdir('../../results/Experiment_2d/field_error')
+                mkdir('/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Experiment_2d/field_error')
             except:
                 pass
-            plt.savefig('../../results/Experiment_2d/field_error/uv_'+str(ii))
+            plt.savefig('/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Experiment_2d/field_error/uv_'+str(ii))
         
         
     def mre_pred(self,data,start=1,end=2,step=1,down_y=1,down_z=1,down_x=1,\
-                 padpix=15,testcases=False,filetest='../../results/Experiment_2d/ind_val.txt'):
+                 padpix=15,testcases=False,filetest='/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Experiment_2d/ind_val.txt'):
         """
         Function for calculating the mean relative error
         """
@@ -1298,7 +1298,7 @@ class convolutional_residual():
 
     
             
-    def savemre(self,file="../../results/Experiment_2d/mre_predic.txt"):
+    def savemre(self,file="/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Experiment_2d/mre_predic.txt"):
         """
         Function for saving the value of the rms velocity
         """

@@ -10,7 +10,7 @@ function for calculating the shap values
 import shap_config as sc
 step = 1
 shap = sc.shap_conf()
-shap.read_data(step=step,absolute=True,testcases=True,numfield=-1,fieldini=0,readdata=False,saveuv=True)
+shap.read_data(step=step,start=1000,absolute=True,testcases=True,numfield=-1,fieldini=0,readdata=False,saveuv=True)
 shap.plot_shaps()
 shap.plot_shaps_pdf(bin_num=20,lev_val=3.1)
 shap.plot_shaps_uv()

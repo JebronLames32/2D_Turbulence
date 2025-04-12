@@ -10,7 +10,7 @@ import ann_config as ann
 import get_data_fun as gd
 
 
-start = 1 
+start = 1000 
 step = 1
 0   
 dy = 1

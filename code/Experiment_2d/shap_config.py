@@ -11,7 +11,7 @@ import os
 
 class shap_conf():
     
-    def __init__(self,filecnn='../../results/Experiment_2d/trained_model.h5'):
+    def __init__(self,filecnn='/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Experiment_2d/trained_model.h5'):
         """
         Initialization of the SHAP class
         """
@@ -21,16 +21,16 @@ class shap_conf():
         CNN.load_ANN()
         self.model = CNN.model
         try:
-            os.mkdir('../../results/SHAP_fields_io/')
+            os.mkdir('/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/SHAP_fields_io/')
         except:
             pass
         
     def calc_shap_kernel(self,start=1,end=2,step=1,\
-                         file='../../results/SHAP_fields_io/PIV',\
-                         fileuvw='../../data/uv_fields_io/PIV',\
-                         fileQ='../../results/Q_fields_io/PIV',\
-                         filenorm="../../results/Experiment_2d/norm.txt",padpix=15,dy=1,dx=1,\
-                         testcases=False,filetest='../../results/Experiment_2d/ind_val.txt',volfilt=900,\
+                         file='/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/SHAP_fields_io/vel_',\
+                         fileuvw='/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newdata/hdf5/vel_',\
+                         fileQ='/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Q_fields_io/vel_',\
+                         filenorm="/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Experiment_2d/norm.txt",padpix=15,dy=1,dx=1,\
+                         testcases=False,filetest='/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Experiment_2d/ind_val.txt',volfilt=900,\
                          numfield=-1,fieldini=0,norep=False):
         import get_data_fun as gd
         import shap 
@@ -55,9 +55,9 @@ class shap_conf():
         else:
             listcases = range(start,end,step)
         for ii in listcases:
-            fileQ_ii = fileQ+'.'+str(ii)+'.*.h5.Q'
+            fileQ_ii = fileQ+str(ii)+'*.h5'
             fileQ_ii2 = glob.glob(fileQ_ii)[0]        
-            index_piv = fileQ_ii2.find('PIV')
+            index_piv = fileQ_ii2.find('vel_')
             fileshap_ii = file+fileQ_ii2[index_piv+3:]
             fileshap_ii = fileQ_ii2.replace('Q','SHAP')
             if norep and len(glob.glob(fileshap_ii)) > 0:
@@ -86,7 +86,7 @@ class shap_conf():
         """ 
         import h5py
         try:
-            os.mkdir('../../results/SHAP_fields_io/')
+            os.mkdir('/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/SHAP_fields_io/')
         except:
             pass
         hf = h5py.File(fileshap_ii, 'w')
@@ -102,11 +102,11 @@ class shap_conf():
         return shap_values
     
     def eval_shap(self,start=1,end=2,step=1,\
-                  fileshap='../../results/SHAP_fields_io/PIV',\
-                  fileuvw='../../data/uv_fields_io/PIV',\
-                  fileQ='../../results/Q_fields_io/PIV',\
-                  filenorm="../../results/Experiment_2d/norm.txt",padpix=15,dy=1,dx=1,\
-                  testcases=False,filetest='../../results/Experiment_2d/ind_val.txt',volfilt=900):
+                  fileshap='/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/SHAP_fields_io/vel_',\
+                  fileuvw='/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newdata/hdf5/vel_',\
+                  fileQ='/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Q_fields_io/vel_',\
+                  filenorm="/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Experiment_2d/norm.txt",padpix=15,dy=1,dx=1,\
+                  testcases=False,filetest='/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Experiment_2d/ind_val.txt',volfilt=900):
         """
         Function to evaluate the value of the mse calculated by SHAP and by the 
         model
@@ -153,7 +153,7 @@ class shap_conf():
             print(error_mse2)
             self.error_mse2.append(error_mse2)        
         import h5py
-        hf = h5py.File('../../results/Experiment_2d/mse_fg2.h5', 'w')
+        hf = h5py.File('/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Experiment_2d/mse_fg2.h5', 'w')
         hf.create_dataset('mse_fg2', data=self.error_mse2)
         
         
@@ -205,16 +205,16 @@ class shap_conf():
         self.background[1] = (value-data.vvmin)/(data.vvmax-data.vvmin)
         
     def read_data(self,start=1,end=2,step=1,\
-                   file='../../results/SHAP_fields_io/PIV',\
-                   fileQ='../../results/Q_fields_io/PIV',\
-                   fileuvw='../../data/uv_fields_io/PIV',\
-                   filenorm="../../results/Experiment_2d/norm.txt",\
+                   file='/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/SHAP_fields_io/vel_',\
+                   fileQ='/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Q_fields_io/vel_',\
+                   fileuvw='/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newdata/hdf5/vel_',\
+                   filenorm="/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Experiment_2d/norm.txt",\
                    colormap='viridis',absolute=False,testcases=False,\
-                   filetest='../../results/Experiment_2d/ind_val.txt',numfield=-1,fieldini=0,dx=1,dy=1,\
+                   filetest='/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Experiment_2d/ind_val.txt',numfield=-1,fieldini=0,dx=1,dy=1,\
                    volfilt=900,wallattach=False,padpix=15,saveuv=False,\
-                   filereystr='../../results/Reynoldsstress_fields_io/PIV',shapmin=-30,\
+                   filereystr='/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Reynoldsstress_fields_io/vel_',shapmin=-30,\
                    shapmax=30,shapminvol=-30,shapmaxvol=30,nbars=1000,editq3=False,\
-                   readdata=False,fileread='../../results/Experiment_2d/data_plots.h5.Q'):
+                   readdata=False,fileread='/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Experiment_2d/data_plots.h5.Q'):
         """
         Read data
         """ 
@@ -223,7 +223,7 @@ class shap_conf():
         import glob
         import h5py
         try:
-            os.mkdir('../../results/Reynoldsstress_fields_io/')
+            os.mkdir('/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Reynoldsstress_fields_io/')
         except:
             pass
         self.wallattach = wallattach
@@ -538,9 +538,9 @@ class shap_conf():
                 listcases = range(start,end,step)
             numfield = 0
             for ii in listcases:
-                fileQ_ii = fileQ+'.'+str(ii)+'.*.h5.Q'
+                fileQ_ii = fileQ+str(ii)+'*.h5'
                 fileQ_ii2 = glob.glob(fileQ_ii)[0]
-                fileSHAP_ii = file+'.'+str(ii)+'.*.h5.SHAP'
+                fileSHAP_ii = file+str(ii)+'*.h5'
                 filereystress_ii = filereystr+'.'+str(ii)+'.'+str(ii+1)+'.h5.reystr'
                 try:
                     fileSHAP_ii2 = glob.glob(fileSHAP_ii)[0]
@@ -802,7 +802,7 @@ class shap_conf():
             shapback_std = np.std(self.shapback_list)
             shapbackvol_mean = np.mean(self.shapbackvol_list)
             shapbackvol_std = np.std(self.shapbackvol_list)
-            file_save = open('../../results/Experiment_2d/backSHAP.txt', "w+") 
+            file_save = open('/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Experiment_2d/backSHAP.txt', "w+") 
             file_save.write('Mean: '+str(shapback_mean)+\
                             '\Std: '+str(shapback_std)+'\n')
             file_save.write('Mean: '+str(shapbackvol_mean)+\
@@ -958,7 +958,7 @@ class shap_conf():
         import matplotlib.pyplot as plt
         import matplotlib as mpl
         try:
-            os.mkdir('../../results/Experiment_2d/')
+            os.mkdir('/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Experiment_2d/')
         except:
             pass
         fs = 20
@@ -987,7 +987,7 @@ class shap_conf():
         cb = plt.colorbar(ticks=[1,2,3,4],cax = cbaxes)
         cb.ax.set_yticklabels(['Outward\ninteraction','Ejection',\
                                'Inward\ninteraction','Sweep'],fontsize=fs-4)
-        plt.savefig('../../results/Experiment_2d/vol_SHAP_'+colormap+'_30+.png')
+        plt.savefig('/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Experiment_2d/vol_SHAP_'+colormap+'_30+.png')
         fig = plt.figure()
         ax = plt.axes()
         if self.wallattach:
@@ -1013,7 +1013,7 @@ class shap_conf():
         cb = plt.colorbar(ticks=[1,2,3,4],cax = cbaxes)
         cb.ax.set_yticklabels(['Outward\ninteraction','Ejection',\
                                'Inward\ninteraction','Sweep'],fontsize=fs-4)
-        plt.savefig('../../results/Experiment_2d/vol_SHAPvol_'+colormap+'_30+.png')
+        plt.savefig('/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Experiment_2d/vol_SHAPvol_'+colormap+'_30+.png')
         
         
         
@@ -1028,7 +1028,7 @@ class shap_conf():
         import matplotlib as mpl    
         from scipy.interpolate import interp2d
         try:
-            os.mkdir('../../results/Experiment_2d/')
+            os.mkdir('/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Experiment_2d/')
         except:
             pass
         xhistmin = np.min([np.min(self.volume_1),np.min(self.volume_2),np.min(self.volume_3),np.min(self.volume_4)])/1.2
@@ -1098,7 +1098,7 @@ class shap_conf():
         labels= ['Outward\ninteractions','Ejections','Inward\ninteractions','Sweeps']
         plt.legend(handles,labels,fontsize=fs-4,loc='center left', bbox_to_anchor=(1, 0.5))
         plt.tight_layout()
-        plt.savefig('../../results/Experiment_2d/hist2d_interp_vol_SHAP_'+colormap+'_30+.png')
+        plt.savefig('/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Experiment_2d/hist2d_interp_vol_SHAP_'+colormap+'_30+.png')
         xhistmin = np.min([np.min(self.volume_1),np.min(self.volume_2),np.min(self.volume_3),np.min(self.volume_4)])/1.2
         xhistmax = np.max([np.max(self.volume_1),np.max(self.volume_2),np.max(self.volume_3),np.max(self.volume_4)])*1.2
         yhistmin = np.min([np.min(self.shap_1_vol),np.min(self.shap_2_vol),np.min(self.shap_3_vol),np.min(self.shap_4_vol)])/1.2
@@ -1166,7 +1166,7 @@ class shap_conf():
         labels= ['Outward\ninteractions','Ejections','Inward\ninteractions','Sweeps']
         plt.legend(handles,labels,fontsize=fs-4,loc='center left', bbox_to_anchor=(1, 0.5))
         plt.tight_layout()
-        plt.savefig('../../results/Experiment_2d/hist2d_interp_vol_SHAPvol_'+colormap+'_30+.png')
+        plt.savefig('/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Experiment_2d/hist2d_interp_vol_SHAPvol_'+colormap+'_30+.png')
         
         
                       
@@ -1179,7 +1179,7 @@ class shap_conf():
         from scipy.interpolate import interp2d
         import matplotlib.colors as colors
         try:
-            os.mkdir('../../results/Experiment_2d/')
+            os.mkdir('/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Experiment_2d/')
         except:
             pass
         xhistmin = np.min([np.min(self.volume_1),np.min(self.volume_2),np.min(self.volume_3),np.min(self.volume_4)])/1.2
@@ -1241,7 +1241,7 @@ class shap_conf():
         cb = plt.colorbar(cax = cbaxes)
         cb.ax.set_ylabel('$N/N_{tot}$',fontsize=fs)
         plt.tick_params(axis='both', which='major', labelsize=fs)
-        plt.savefig('../../results/Experiment_2d/hist2d_interp_vol_SHAP_'+colormap+'_30+_Q1.png')
+        plt.savefig('/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Experiment_2d/hist2d_interp_vol_SHAP_'+colormap+'_30+_Q1.png')
         fig=plt.figure()
         ax = plt.axes()
         plt.pcolor(vol_grid,shap_grid,histogram_Q2.T,cmap=colormap,\
@@ -1257,7 +1257,7 @@ class shap_conf():
         cb = plt.colorbar(cax = cbaxes)
         cb.ax.set_ylabel('$N/N_{tot}$',fontsize=fs)
         plt.tick_params(axis='both', which='major', labelsize=fs)
-        plt.savefig('../../results/Experiment_2d/hist2d_interp_vol_SHAP_'+colormap+'_30+_Q2.png')
+        plt.savefig('/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Experiment_2d/hist2d_interp_vol_SHAP_'+colormap+'_30+_Q2.png')
         fig=plt.figure()
         ax = plt.axes()
         plt.pcolor(vol_grid,shap_grid,histogram_Q3.T,cmap=colormap,\
@@ -1273,7 +1273,7 @@ class shap_conf():
         cb = plt.colorbar(cax = cbaxes)
         cb.ax.set_ylabel('$N/N_{tot}$',fontsize=fs)
         plt.tick_params(axis='both', which='major', labelsize=fs)
-        plt.savefig('../../results/Experiment_2d/hist2d_interp_vol_SHAP_'+colormap+'_30+_Q3.png')
+        plt.savefig('/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Experiment_2d/hist2d_interp_vol_SHAP_'+colormap+'_30+_Q3.png')
         fig=plt.figure()
         ax = plt.axes()
         plt.pcolor(vol_grid,shap_grid,histogram_Q4.T,cmap=colormap,\
@@ -1289,7 +1289,7 @@ class shap_conf():
         cb = plt.colorbar(cax = cbaxes)
         cb.ax.set_ylabel('$N/N_{tot}$',fontsize=fs)
         plt.tick_params(axis='both', which='major', labelsize=fs)
-        plt.savefig('../../results/Experiment_2d/hist2d_interp_vol_SHAP_'+colormap+'_30+_Q4.png')
+        plt.savefig('/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Experiment_2d/hist2d_interp_vol_SHAP_'+colormap+'_30+_Q4.png')
         
         
         xhistmin = np.min([np.min(self.volume_1),np.min(self.volume_2),np.min(self.volume_3),np.min(self.volume_4)])/1.2
@@ -1351,7 +1351,7 @@ class shap_conf():
         cb = plt.colorbar(cax = cbaxes)
         cb.ax.set_ylabel('$N/N_{tot}$',fontsize=fs)
         plt.tick_params(axis='both', which='major', labelsize=fs)
-        plt.savefig('../../results/Experiment_2d/hist2d_interp_vol_SHAPvol_'+colormap+'_30+_Q1.png')
+        plt.savefig('/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Experiment_2d/hist2d_interp_vol_SHAPvol_'+colormap+'_30+_Q1.png')
         fig=plt.figure()
         ax = plt.axes()
         plt.pcolor(vol_grid_vol,shap_grid_vol,histogram_Q2_vol.T,cmap=colormap,\
@@ -1367,7 +1367,7 @@ class shap_conf():
         cb = plt.colorbar(cax = cbaxes)
         cb.ax.set_ylabel('$N/N_{tot}$',fontsize=fs)
         plt.tick_params(axis='both', which='major', labelsize=fs)
-        plt.savefig('../../results/Experiment_2d/hist2d_interp_vol_SHAPvol_'+colormap+'_30+_Q2.png')
+        plt.savefig('/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Experiment_2d/hist2d_interp_vol_SHAPvol_'+colormap+'_30+_Q2.png')
         fig=plt.figure()
         ax = plt.axes()
         plt.pcolor(vol_grid_vol,shap_grid_vol,histogram_Q3_vol.T,cmap=colormap,\
@@ -1383,7 +1383,7 @@ class shap_conf():
         cb = plt.colorbar(cax = cbaxes)
         cb.ax.set_ylabel('$N/N_{tot}$',fontsize=fs)
         plt.tick_params(axis='both', which='major', labelsize=fs)
-        plt.savefig('../../results/Experiment_2d/hist2d_interp_vol_SHAPvol_'+colormap+'_30+_Q3.png')
+        plt.savefig('/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Experiment_2d/hist2d_interp_vol_SHAPvol_'+colormap+'_30+_Q3.png')
         fig=plt.figure()
         ax = plt.axes()
         plt.pcolor(vol_grid_vol,shap_grid_vol,histogram_Q4_vol.T,cmap=colormap,\
@@ -1399,7 +1399,7 @@ class shap_conf():
         cb = plt.colorbar(cax = cbaxes)
         cb.ax.set_ylabel('$N/N_{tot}$',fontsize=fs)
         plt.tick_params(axis='both', which='major', labelsize=fs)
-        plt.savefig('../../results/Experiment_2d/hist2d_interp_vol_SHAPvol_'+colormap+'_30+_Q4.png')
+        plt.savefig('/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Experiment_2d/hist2d_interp_vol_SHAPvol_'+colormap+'_30+_Q4.png')
         
         
         
@@ -1410,7 +1410,7 @@ class shap_conf():
         import matplotlib.pyplot as plt
         import matplotlib as mpl
         try:
-            os.mkdir('../../results/Experiment_2d/')
+            os.mkdir('/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Experiment_2d/')
         except:
             pass
         volume_size_wa = 50 #1e3*(np.array(volume_wa)-volfilt)/(voltot-volfilt)+50
@@ -1441,7 +1441,7 @@ class shap_conf():
         cb = plt.colorbar(ticks=[1,2,3,4],cax = cbaxes)
         cb.ax.set_yticklabels(['Outward\ninteraction','Ejection',\
                                'Inward\ninteraction','Sweep'],fontsize=fs-4)
-        plt.savefig('../../results/Experiment_2d/uv_SHAP_'+colormap+'_30+.png')
+        plt.savefig('/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Experiment_2d/uv_SHAP_'+colormap+'_30+.png')
         fig = plt.figure()
         ax = plt.axes()
         cmap_fill = plt.cm.get_cmap('viridis', 10)
@@ -1512,7 +1512,7 @@ class shap_conf():
         cb = plt.colorbar(ticks=[1,2,3,4],cax = cbaxes)
         cb.ax.set_yticklabels(['Outward\ninteraction','Ejection',\
                                'Inward\ninteraction','Sweep'],fontsize=fs-4)
-        plt.savefig('../../results/Experiment_2d/uvvol_SHAPvol_'+colormap+'_30+.png')
+        plt.savefig('/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Experiment_2d/uvvol_SHAPvol_'+colormap+'_30+.png')
         fig = plt.figure()
         ax = plt.axes()
         if self.wallattach:
@@ -1539,7 +1539,7 @@ class shap_conf():
         cb = plt.colorbar(ticks=[1,2,3,4],cax = cbaxes)
         cb.ax.set_yticklabels(['Outward\ninteraction','Ejection',\
                                'Inward\ninteraction','Sweep'],fontsize=fs-4)
-        plt.savefig('../../results/Experiment_2d/uvvoluvoltot_SHAPvol_'+colormap+'_30+.png')
+        plt.savefig('/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Experiment_2d/uvvoluvoltot_SHAPvol_'+colormap+'_30+.png')
         
        
         
@@ -1551,7 +1551,7 @@ class shap_conf():
         import matplotlib as mpl    
         from scipy.interpolate import interp2d
         try:
-            os.mkdir('../../results/Experiment_2d/')
+            os.mkdir('/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Experiment_2d/')
         except:
             pass
         xhistmin = np.min([np.min(self.uv_uvtot_1),np.min(self.uv_uvtot_2),np.min(self.uv_uvtot_3),np.min(self.uv_uvtot_4)])/1.2
@@ -1621,7 +1621,7 @@ class shap_conf():
         labels= ['Outward\ninteractions','Ejections','Inward\ninteractions','Sweeps']
         plt.legend(handles,labels,fontsize=fs-4,loc='center left', bbox_to_anchor=(1, 0.5))
         plt.tight_layout()
-        plt.savefig('../../results/Experiment_2d/hist2d_interp_uvuvtot_SHAP_'+colormap+'_30+.png')
+        plt.savefig('/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Experiment_2d/hist2d_interp_uvuvtot_SHAP_'+colormap+'_30+.png')
         xhistmin = np.min([np.min(self.uv_uvtot_1_vol),np.min(self.uv_uvtot_2_vol),np.min(self.uv_uvtot_3_vol),np.min(self.uv_uvtot_4_vol)])/1.2
         xhistmax = np.max([np.max(self.uv_uvtot_1_vol),np.max(self.uv_uvtot_2_vol),np.max(self.uv_uvtot_3_vol),np.max(self.uv_uvtot_4_vol)])*1.2
         yhistmin = np.min([np.min(self.shap_1_vol),np.min(self.shap_2_vol),np.min(self.shap_3_vol),np.min(self.shap_4_vol)])/1.2
@@ -1720,7 +1720,7 @@ class shap_conf():
         labels= ['Outward\ninteractions','Ejections','Inward\ninteractions','Sweeps']
         plt.legend(handles,labels,fontsize=fs-4,loc='center left', bbox_to_anchor=(1, 0.5))
         plt.tight_layout()
-        plt.savefig('../../results/Experiment_2d/hist2d_interp_uvuvtotvol_SHAPvol_'+colormap+'_30+.png')
+        plt.savefig('/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Experiment_2d/hist2d_interp_uvuvtotvol_SHAPvol_'+colormap+'_30+.png')
         
                     
     def plot_shaps_uv_pdf_probability(self,colormap='viridis',bin_num=100,lev_val=2.5,alf=0.5):
@@ -1732,7 +1732,7 @@ class shap_conf():
         from scipy.interpolate import interp2d
         import matplotlib.colors as colors
         try:
-            os.mkdir('../../results/Experiment_2d/')
+            os.mkdir('/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Experiment_2d/')
         except:
             pass
         xhistmin = np.min([np.min(self.uv_uvtot_1),np.min(self.uv_uvtot_2),np.min(self.uv_uvtot_3),np.min(self.uv_uvtot_4)])/1.2
@@ -1794,7 +1794,7 @@ class shap_conf():
         cb = plt.colorbar(cax = cbaxes)
         cb.ax.set_ylabel('$N/N_{tot}$',fontsize=fs)
         plt.tick_params(axis='both', which='major', labelsize=fs)
-        plt.savefig('../../results/Experiment_2d/hist2d_interp_uvuvtot_SHAP_'+colormap+'_30+_Q1.png')
+        plt.savefig('/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Experiment_2d/hist2d_interp_uvuvtot_SHAP_'+colormap+'_30+_Q1.png')
         fig=plt.figure()
         ax = plt.axes()
         plt.pcolor(uv_grid,shap_grid,histogram_Q2.T,cmap=colormap,\
@@ -1810,7 +1810,7 @@ class shap_conf():
         cb = plt.colorbar(cax = cbaxes)
         cb.ax.set_ylabel('$N/N_{tot}$',fontsize=fs)
         plt.tick_params(axis='both', which='major', labelsize=fs)
-        plt.savefig('../../results/Experiment_2d/hist2d_interp_uvuvtot_SHAP_'+colormap+'_30+_Q2.png')
+        plt.savefig('/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Experiment_2d/hist2d_interp_uvuvtot_SHAP_'+colormap+'_30+_Q2.png')
         fig=plt.figure()
         ax = plt.axes()
         plt.pcolor(uv_grid,shap_grid,histogram_Q3.T,cmap=colormap,\
@@ -1826,7 +1826,7 @@ class shap_conf():
         cb = plt.colorbar(cax = cbaxes)
         cb.ax.set_ylabel('$N/N_{tot}$',fontsize=fs)
         plt.tick_params(axis='both', which='major', labelsize=fs)
-        plt.savefig('../../results/Experiment_2d/hist2d_interp_uvuvtot_SHAP_'+colormap+'_30+_Q3.png')
+        plt.savefig('/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Experiment_2d/hist2d_interp_uvuvtot_SHAP_'+colormap+'_30+_Q3.png')
         fig=plt.figure()
         ax = plt.axes()
         plt.pcolor(uv_grid,shap_grid,histogram_Q4.T,cmap=colormap,\
@@ -1842,7 +1842,7 @@ class shap_conf():
         cb = plt.colorbar(cax = cbaxes)
         cb.ax.set_ylabel('$N/N_{tot}$',fontsize=fs)
         plt.tick_params(axis='both', which='major', labelsize=fs)
-        plt.savefig('../../results/Experiment_2d/hist2d_interp_uvuvtot_SHAP_'+colormap+'_30+_Q4.png')
+        plt.savefig('/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Experiment_2d/hist2d_interp_uvuvtot_SHAP_'+colormap+'_30+_Q4.png')
         
         xhistmin = np.min([np.min(self.uv_uvtot_1_vol),np.min(self.uv_uvtot_2_vol),np.min(self.uv_uvtot_3_vol),np.min(self.uv_uvtot_4_vol)])/1.2
         xhistmax = np.max([np.max(self.uv_uvtot_1_vol),np.max(self.uv_uvtot_2_vol),np.max(self.uv_uvtot_3_vol),np.max(self.uv_uvtot_4_vol)])*1.2
@@ -1935,7 +1935,7 @@ class shap_conf():
         cb = plt.colorbar(cax = cbaxes)
         cb.ax.set_ylabel('$N/N_{tot}$',fontsize=fs)
         plt.tick_params(axis='both', which='major', labelsize=fs)
-        plt.savefig('../../results/Experiment_2d/hist2d_interp_uvuvtotvol_SHAPvol_'+colormap+'_30+_Q1.png')
+        plt.savefig('/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Experiment_2d/hist2d_interp_uvuvtotvol_SHAPvol_'+colormap+'_30+_Q1.png')
         fig=plt.figure()
         ax = plt.axes()
         plt.fill_between([x0,x1,x0b,x2],[y0_1,y1_1,y1_1,y1_1],[y0_2,y0_2,y0_2,y1_2],\
@@ -1971,7 +1971,7 @@ class shap_conf():
         cb = plt.colorbar(cax = cbaxes)
         cb.ax.set_ylabel('$N/N_{tot}$',fontsize=fs)
         plt.tick_params(axis='both', which='major', labelsize=fs)
-        plt.savefig('../../results/Experiment_2d/hist2d_interp_uvuvtotvol_SHAPvol_'+colormap+'_30+_Q2.png')
+        plt.savefig('/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Experiment_2d/hist2d_interp_uvuvtotvol_SHAPvol_'+colormap+'_30+_Q2.png')
         fig=plt.figure()
         ax = plt.axes()
         plt.fill_between([x0,x1,x0b,x2],[y0_1,y1_1,y1_1,y1_1],[y0_2,y0_2,y0_2,y1_2],\
@@ -2007,7 +2007,7 @@ class shap_conf():
         cb = plt.colorbar(cax = cbaxes)
         cb.ax.set_ylabel('$N/N_{tot}$',fontsize=fs)
         plt.tick_params(axis='both', which='major', labelsize=fs)
-        plt.savefig('../../results/Experiment_2d/hist2d_interp_uvuvtotvol_SHAPvol_'+colormap+'_30+_Q3.png')
+        plt.savefig('/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Experiment_2d/hist2d_interp_uvuvtotvol_SHAPvol_'+colormap+'_30+_Q3.png')
         fig=plt.figure()
         ax = plt.axes()
         plt.fill_between([x0,x1,x0b,x2],[y0_1,y1_1,y1_1,y1_1],[y0_2,y0_2,y0_2,y1_2],\
@@ -2043,7 +2043,7 @@ class shap_conf():
         cb = plt.colorbar(cax = cbaxes)
         cb.ax.set_ylabel('$N/N_{tot}$',fontsize=fs)
         plt.tick_params(axis='both', which='major', labelsize=fs)
-        plt.savefig('../../results/Experiment_2d/hist2d_interp_uvuvtotvol_SHAPvol_'+colormap+'_30+_Q4.png')
+        plt.savefig('/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Experiment_2d/hist2d_interp_uvuvtotvol_SHAPvol_'+colormap+'_30+_Q4.png')
 
     
     
@@ -2053,7 +2053,7 @@ class shap_conf():
         Function for plotting the results of the SHAP vs the Reynolds stress
         """
         try:
-            os.mkdir('../../results/Experiment_2d/')
+            os.mkdir('/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Experiment_2d/')
         except:
             pass
         kdedata_SHAP_1 = np.array(self.shap_1).reshape(-1,1)
@@ -2275,7 +2275,7 @@ class shap_conf():
         ax.set_ylim([1e-5,1e1])
         plt.legend(fontsize=20, bbox_to_anchor=(1, 1))
         ax.grid() 
-        plt.savefig('../../results/Experiment_2d/kde_SHAP_'+colormap+'_30+.png')
+        plt.savefig('/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Experiment_2d/kde_SHAP_'+colormap+'_30+.png')
         # New figure
         plt.figure(21,figsize=(10, 5))
         ax = plt.axes()
@@ -2336,7 +2336,7 @@ class shap_conf():
         ax.set_ylim([1e-5,1e0])
         plt.legend(fontsize=20, bbox_to_anchor=(1, 1))
         ax.grid()
-        plt.savefig('../../results/Experiment_2d/kde_SHAPvol_'+colormap+'_30+.png')  
+        plt.savefig('/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Experiment_2d/kde_SHAPvol_'+colormap+'_30+.png')  
         # New figure
         plt.figure(22,figsize=(10, 5))
         ax = plt.axes()
@@ -2386,7 +2386,7 @@ class shap_conf():
         ax.set_ylim([1e-5,1e1])
         plt.legend(fontsize=20, bbox_to_anchor=(1, 1))
         ax.grid() 
-        plt.savefig('../../results/Experiment_2d/kde_SHAPjoin_'+colormap+'_30+.png')
+        plt.savefig('/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Experiment_2d/kde_SHAPjoin_'+colormap+'_30+.png')
         # New figure
         plt.figure(23,figsize=(10, 5))
         ax = plt.axes()
@@ -2436,7 +2436,7 @@ class shap_conf():
         ax.set_ylim([1e-5,1e0])
         plt.legend(fontsize=20, bbox_to_anchor=(1, 1))
         ax.grid()  
-        plt.savefig('../../results/Experiment_2d/kde_SHAPvoljoin_'+colormap+'_30+.png')
+        plt.savefig('/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Experiment_2d/kde_SHAPvoljoin_'+colormap+'_30+.png')
         
         
             
@@ -2449,7 +2449,7 @@ class shap_conf():
         import matplotlib.colors as colors
         from matplotlib import cm  
         try:
-            os.mkdir('../../results/Experiment_2d/')
+            os.mkdir('/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Experiment_2d/')
         except:
             pass
         cmap = cm.get_cmap('viridis', 4).colors
@@ -2474,7 +2474,7 @@ class shap_conf():
         plt.tick_params(axis='both',which='major',labelsize=fs)
         plt.tick_params(axis='both',which='major',labelsize=fs)
         plt.tight_layout()
-        plt.savefig('../../results/Experiment_2d/SHAP_AR_'+colormap+'_30+.png')
+        plt.savefig('/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Experiment_2d/SHAP_AR_'+colormap+'_30+.png')
         fig = plt.figure()
         ax = plt.axes()
         plt.plot(self.AR1_grid,self.SHAP_grid1vol*1e9,\
@@ -2495,7 +2495,7 @@ class shap_conf():
         plt.tick_params(axis='both',which='major',labelsize=fs)
         plt.tick_params(axis='both',which='major',labelsize=fs)
         plt.tight_layout()
-        plt.savefig('../../results/Experiment_2d/SHAPvol_AR_'+colormap+'_30+.png')
+        plt.savefig('/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Experiment_2d/SHAPvol_AR_'+colormap+'_30+.png')
        
 
     def plot_shaps_AR_scatter(self,colormap='viridis'):
@@ -2505,7 +2505,7 @@ class shap_conf():
         import matplotlib.pyplot as plt
         import matplotlib as mpl
         try:
-            os.mkdir('../../results/Experiment_2d/')
+            os.mkdir('/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Experiment_2d/')
         except:
             pass
         fs = 20
@@ -2535,7 +2535,7 @@ class shap_conf():
         cb = plt.colorbar(ticks=[1,2,3,4],cax = cbaxes)
         cb.ax.set_yticklabels(['Outward\ninteraction','Ejection',\
                                'Inward\ninteraction','Sweep'],fontsize=fs-4)
-        plt.savefig('../../results/Experiment_2d/dxdy_SHAP_'+colormap+'_30+.png')
+        plt.savefig('/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Experiment_2d/dxdy_SHAP_'+colormap+'_30+.png')
         fig = plt.figure()
         ax = plt.axes()
         if self.wallattach:
@@ -2562,7 +2562,7 @@ class shap_conf():
         cb = plt.colorbar(ticks=[1,2,3,4],cax = cbaxes)
         cb.ax.set_yticklabels(['Outward\ninteraction','Ejection',\
                                'Inward\ninteraction','Sweep'],fontsize=fs-4)
-        plt.savefig('../../results/Experiment_2d/dxdy_SHAPvol_'+colormap+'_30+.png')
+        plt.savefig('/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Experiment_2d/dxdy_SHAPvol_'+colormap+'_30+.png')
            
         
                 
@@ -2574,7 +2574,7 @@ class shap_conf():
         import matplotlib as mpl    
         from scipy.interpolate import interp2d
         try:
-            os.mkdir('../../results/Experiment_2d/')
+            os.mkdir('/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Experiment_2d/')
         except:
             pass
         xhistmin = np.log10(np.min([np.min(self.dxdy_1),np.min(self.dxdy_2),np.min(self.dxdy_3),np.min(self.dxdy_4)])/1.2)
@@ -2650,7 +2650,7 @@ class shap_conf():
         labels= ['Outward\ninteractions','Ejections','Inward\ninteractions','Sweeps']
         plt.legend(handles,labels,fontsize=fs-4,loc='center left', bbox_to_anchor=(1, 0.5))
         plt.tight_layout()
-        plt.savefig('../../results/Experiment_2d/hist2d_interp_AR_SHAP_'+colormap+'_30+.png')
+        plt.savefig('/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Experiment_2d/hist2d_interp_AR_SHAP_'+colormap+'_30+.png')
         xhistmin = np.log10(np.min([np.min(self.dxdy_1),np.min(self.dxdy_2),np.min(self.dxdy_3),np.min(self.dxdy_4)])/1.2)
         xhistmax = np.log10(np.max([np.max(self.dxdy_1),np.max(self.dxdy_2),np.max(self.dxdy_3),np.max(self.dxdy_4)])*1.2)
         yhistmin = np.min([np.min(self.shap_1_vol),np.min(self.shap_2_vol),np.min(self.shap_3_vol),np.min(self.shap_4_vol)])/1.2
@@ -2724,7 +2724,7 @@ class shap_conf():
         labels= ['Outward\ninteractions','Ejections','Inward\ninteractions','Sweeps']
         plt.legend(handles,labels,fontsize=fs-4,loc='center left', bbox_to_anchor=(1, 0.5))
         plt.tight_layout()
-        plt.savefig('../../results/Experiment_2d/hist2d_interp_AR_SHAPvol_'+colormap+'_30+.png')
+        plt.savefig('/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Experiment_2d/hist2d_interp_AR_SHAPvol_'+colormap+'_30+.png')
         
         
         
@@ -2735,7 +2735,7 @@ class shap_conf():
         structure
         """
         try:
-            os.mkdir('../../results/Experiment_2d/')
+            os.mkdir('/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Experiment_2d/')
         except:
             pass
         shap1 = self.shap1cum
@@ -2790,8 +2790,8 @@ class shap_conf():
         ax.xaxis.get_offset_text().set_fontsize(fs)
         plt.legend(fontsize=fs, bbox_to_anchor=(1, 1))
         ax.grid()  
-        plt.savefig('../../results/Experiment_2d/bar_SHAP_'+colormap+'_30+.png')
-        file_save = open('../../results/Experiment_2d/bar_SHAP.txt', "w+") 
+        plt.savefig('/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Experiment_2d/bar_SHAP_'+colormap+'_30+.png')
+        file_save = open('/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Experiment_2d/bar_SHAP.txt', "w+") 
         file_save.write('SHAP percentage: \nOutward Int. '+str(shap1)+\
                         '\nEjections '+str(shap2)+'\nInward Int. '+str(shap3)+\
                         '\nSweeps '+str(shap4)+'\n')
@@ -2804,9 +2804,9 @@ class shap_conf():
             
           
     def plot_shaps_total_noback(self,start=1,end=2,step=1,\
-                                file='../SHAP_fields_io/PIV',\
-                                fileQ='../Q_fields_io/PIV',\
-                                fileuvw='../uv_fields_io/PIV',\
+                                file='/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/SHAP_fields_io/vel_',\
+                                fileQ='/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Q_fields_io/vel_',\
+                                fileuvw='/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newdata/hdf5/vel_',\
                                 filenorm="norm.txt",\
                                 colormap='viridis',absolute=False,testcases=False,\
                                 filetest='ind_val.txt',numfield=-1,fieldini=0,dx=1,dy=1,\
@@ -2816,7 +2816,7 @@ class shap_conf():
         structure
         """
         try:
-            os.mkdir('../../results/Experiment_2d/')
+            os.mkdir('/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Experiment_2d/')
         except:
             pass
         shap1 = self.shap1cum
@@ -2864,8 +2864,8 @@ class shap_conf():
         ax.xaxis.get_offset_text().set_fontsize(fs)
         plt.legend(fontsize=fs, bbox_to_anchor=(1, 1))
         ax.grid()  
-        plt.savefig('../../results/Experiment_2d/bar_SHAP_noback_'+colormap+'_30+.png')
-        file_save = open('../../results/Experiment_2d/bar_SHAP_noback.txt', "w+") 
+        plt.savefig('/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Experiment_2d/bar_SHAP_noback_'+colormap+'_30+.png')
+        file_save = open('/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Experiment_2d/bar_SHAP_noback.txt', "w+") 
         file_save.write('SHAP percentage: \nOutward Int. '+str(shap1)+\
                         '\nEjections '+str(shap2)+'\nInward Int. '+str(shap3)+\
                         '\nSweeps '+str(shap4)+'\n')

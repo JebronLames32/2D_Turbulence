@@ -12,5 +12,5 @@ os.environ['HDF5_USE_FILE_LOCKING'] = 'FALSE'
 import shap_config as sc
 step = 1
 shap = sc.shap_conf()
-shap.calc_shap_kernel(step=step,norep=True,testcases=True,numfield=-1,fieldini=0)
+shap.calc_shap_kernel(step=step,start=1000,norep=True,testcases=True,numfield=-1,fieldini=0)
                       

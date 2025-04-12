@@ -284,9 +284,9 @@ class get_data_norm():
         """        
         import glob
         if out:
-            file_ii = self.file+'.*.'+str(ii)+'.h5.uvw'
+            file_ii = self.file+str(ii)+'.h5'
         else:
-            file_ii = self.file+'.'+str(ii)+'.*.h5.uvw'
+            file_ii = self.file+str(ii)+'*.h5'
         file_ii2 = glob.glob(file_ii)[0]
         print('Normalization velocity calculation:' + str(file_ii2))
         file = h5py.File(file_ii2,'r+')    
