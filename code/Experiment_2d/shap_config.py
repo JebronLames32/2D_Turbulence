@@ -30,7 +30,7 @@ class shap_conf():
                          fileuvw='/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newdata/hdf5/vel_',\
                          fileQ='/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Q_fields_io/vel_',\
                          filenorm="/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Experiment_2d/norm.txt",padpix=15,dy=1,dx=1,\
-                         testcases=False,filetest='/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Experiment_2d/ind_val.txt',volfilt=900,\
+                         testcases=False,filetest='/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Experiment_2d/ind_val.txt',volfilt=1e8,\
                          numfield=-1,fieldini=0,norep=False):
         import get_data_fun as gd
         import shap 
@@ -106,7 +106,7 @@ class shap_conf():
                   fileuvw='/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newdata/hdf5/vel_',\
                   fileQ='/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Q_fields_io/vel_',\
                   filenorm="/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Experiment_2d/norm.txt",padpix=15,dy=1,dx=1,\
-                  testcases=False,filetest='/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Experiment_2d/ind_val.txt',volfilt=900):
+                  testcases=False,filetest='/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Experiment_2d/ind_val.txt',volfilt=1e8):
         """
         Function to evaluate the value of the mse calculated by SHAP and by the 
         model
@@ -211,7 +211,7 @@ class shap_conf():
                    filenorm="/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Experiment_2d/norm.txt",\
                    colormap='viridis',absolute=False,testcases=False,\
                    filetest='/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Experiment_2d/ind_val.txt',numfield=-1,fieldini=0,dx=1,dy=1,\
-                   volfilt=900,wallattach=False,padpix=15,saveuv=False,\
+                   volfilt=1e8,wallattach=False,padpix=15,saveuv=False,\
                    filereystr='/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Reynoldsstress_fields_io/vel_',shapmin=-30,\
                    shapmax=30,shapminvol=-30,shapmaxvol=30,nbars=1000,editq3=False,\
                    readdata=False,fileread='/codebase/python files/Identifying-regions-of-importance-in-wall-bounded-turbulence-through-explainable-deep-learning-main/newresults/Experiment_2d/data_plots.h5.Q'):
@@ -2810,7 +2810,7 @@ class shap_conf():
                                 filenorm="norm.txt",\
                                 colormap='viridis',absolute=False,testcases=False,\
                                 filetest='ind_val.txt',numfield=-1,fieldini=0,dx=1,dy=1,\
-                                volfilt=900):
+                                volfilt=1e8):
         """
         Function for calculating the SHAP contribution of each kind of 
         structure

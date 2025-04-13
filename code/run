@@ -16,9 +16,9 @@ set -ex
 # python -u readshap.py "$@"
 
 # Run the 2d experiments
-cd ./Experiment_2d/
-python -u main_segment.py "$@"
-# python -m pdb main_segment.py "$@"
+# cd ./Experiment_2d/
+# python -u main_segment.py "$@"
+# # python -m pdb main_segment.py "$@"
 
 # python -u main_CNN.py "$@"
 # python -u plottrain.py "$@"
@@ -28,8 +28,8 @@ python -u main_segment.py "$@"
 # python -u main_shap.py "$@"
 # python -u readshap.py "$@"
 # Run the 2d experiments for node influence
-# cd ../Experiment_2d_point/
-# python -u main_shap.py "$@"
+cd ./Experiment_2d_point/
+python -u main_shap.py "$@"
 # python -u readshap_deep.py "$@"
 
 echo "Final"

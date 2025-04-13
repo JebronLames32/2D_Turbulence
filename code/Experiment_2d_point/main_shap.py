@@ -10,6 +10,6 @@ function for calculating the shap values
 import shap_config as sc
 step = 1
 shap = sc.shap_conf()
-shap.calc_shap_deep(step=step,norep=False,testcases=True)
+shap.calc_shap_deep(step=step,start=1000,norep=False,testcases=True)
                       
 #shap.eval_shap(step=step,testcases=True),model0='trained_model_0.h5'
